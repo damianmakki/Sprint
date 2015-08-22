@@ -70,7 +70,7 @@ home="$PWD/../.."
 sublimeDir="$home/Library/Application Support/Sublime Text 3"
 
 packages="$sublimeDir/Packages"
-sharedPackages="$PWD/Sublime Text 3/Packages"
+sharedPackages="$PWD/Sublime/Packages"
 
 if [[ ! -L $packages ]]; then
     echo "=> Symlinking Sublime Packages directory"
@@ -79,7 +79,7 @@ if [[ ! -L $packages ]]; then
 fi
 
 installedPackages="$sublimeDir/Installed Packages"
-sharedInstalledPackages="$PWD/Sublime Text 3/Installed Packages"
+sharedInstalledPackages="$PWD/Sublime/Installed Packages"
 
 if [[ ! -L $installedPackages ]]; then
     echo "=> Symlinking Sublime Installed Packages directory"
@@ -325,11 +325,6 @@ echo "Disabling natural scroll"
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
 echo ""
-echo "Setting trackpad & mouse speed to a reasonable number"
-defaults write -g com.apple.trackpad.scaling 2
-defaults write -g com.apple.mouse.scaling 2.5
-
-echo ""
 echo "Turn off keyboard illumination when computer is not used for 5 minutes"
 defaults write com.apple.BezelServices kDimTime -int 300
 
@@ -442,43 +437,6 @@ fi
 echo ""
 echo "Allowing text selection in Quick Look/Preview in Finder by default"
 defaults write com.apple.finder QLEnableTextSelection -bool true
-
-echo ""
-echo "Show item info near icons on the desktop and in other icon views? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-fi
-
-
-echo ""
-echo "Enable snap-to-grid for icons on the desktop and in other icon views? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-fi
-
-echo ""
-echo "Increase grid spacing for icons on the desktop and in other icon views? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:gridSpacing 100" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:gridSpacing 100" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:gridSpacing 100" ~/Library/Preferences/com.apple.finder.plist
-fi
-
-echo ""
-echo "Increase the size of icons on the desktop and in other icon views? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 56" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 56" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 56" ~/Library/Preferences/com.apple.finder.plist
-fi
 
 
 ###############################################################################
