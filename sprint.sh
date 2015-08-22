@@ -88,7 +88,7 @@ if [[ ! -L $installedPackages ]]; then
 fi
 
 sshConfig="$home/.ssh"
-sharedSshConfig="$PWD/config/.ssh"
+sharedSshConfig="$PWD/.ssh"
 
 if [[ ! -L $sshConfig ]]; then
     echo "=> Symlinking SSH Config"
@@ -102,7 +102,7 @@ if [[ ! -L $sshConfig ]]; then
 fi
 
 bash_profile="$home/.bash_profile"
-sharedBashProfile="$PWD/config/.bash_profile"
+sharedBashProfile="$PWD/.bash_profile"
 
 if [[ ! -L $bash_profile ]]; then
     echo "=> Symlinking Bash Profile"
@@ -116,7 +116,7 @@ if [[ ! -L $bash_profile ]]; then
 fi
 
 etcHosts="/etc/hosts"
-sharedEtcHosts="$PWD/etc/hosts"
+sharedEtcHosts="$PWD/hosts"
 
 if [[ ! -L $etcHosts ]]; then
     echo "=> Symlinking Hosts File"

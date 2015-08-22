@@ -4,7 +4,28 @@ A compilation of some of the best configuration settings for getting a Mac up an
 This script is dependent upon having [Dropbox](http://www.dropbox.com) set up before starting.
 
 ###Use at your own risk
-While I've run this a few times myself to work the kinks out, you should take a look through before running it. There are some pretty heavily opinionated options (I couldn't find a suitable hot corners setup), so definitely take the time. Also, change out your email address.
+While I've run this a few times myself to work the kinks out, you should take a look through before running it. There are some pretty heavily opinionated options (I couldn't find a suitable hot corners setup), so definitely take the time. Also, change out the email address at the beginning.
+
+###Usage
+
+1. Download this package and drop it into your Dropbox folder of choice. I call mine **Sprint**.
+2. Open up Terminal and
+
+
+```sh
+$ cd /Dropbox/Sprint
+$ sh sprint.sh
+```
+
+Let it run and follow the prompts.
+
+##Advanced Usage
+This script was designed to keep my Macs in tandem. In that vein, I keep backups of:
+- .bash_profile
+- .ssh folders
+- hosts file
+
+and store them in the same Dropbox folder as **Sprint**. If you don't have them, it's cool, this script will non-destructively make/backup these files and folders. (good thinking, @joetannenbaum).
 
 ###Standing on the shoulders of giants
 Perhaps one line of this was actually written by me. I'd like to give credit to the sources and original files I compiled this from.
