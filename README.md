@@ -4,7 +4,7 @@ A compilation of some of the best configuration settings for getting a Mac up an
 This script is dependent upon having [Dropbox](http://www.dropbox.com) set up before starting.
 
 ###Use at your own risk
-While I've run this a few times myself to work the kinks out, you should take a look through before running it. There are some pretty heavily opinionated options (I couldn't find a suitable hot corners setup), so definitely take the time. Also, change out the email address at the beginning.
+While I've run this a few times myself to work the kinks out, you should take a look through before running it. There are some pretty heavily opinionated options (alas, I couldn't find a suitable hot corners setup), and some [Casks](https://github.com/caskroom/homebrew-cask/tree/master/Casks) you may not want to install, so definitely take the time. **Protip:** Change out the email address at the beginning.
 
 ###Usage
 
@@ -13,7 +13,7 @@ While I've run this a few times myself to work the kinks out, you should take a 
 
 
 ```sh
-$ cd /Dropbox/Sprint
+$ cd ~/Dropbox/Sprint
 $ sh sprint.sh
 ```
 
