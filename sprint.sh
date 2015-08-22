@@ -19,7 +19,9 @@ brew install homebrew/dupes/grep
 brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
 brew cask install appcleaner
+brew cask install calibre
 brew cask install dropbox
+brew cask install firefox
 brew cask install google-chrome
 brew cask install grandperspective
 brew cask install lastpass
@@ -135,6 +137,7 @@ echo ""
 echo "Other things you may want to grab:"
 echo ""
 echo "=> Wunderlist https://itunes.apple.com/app/wunderlist-to-do-list-tasks/id410628904"
+echo "=> Adobe Creative Cloud http://www.adobe.com/creativecloud.html"
 echo ""
 
 
