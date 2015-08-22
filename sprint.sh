@@ -58,7 +58,7 @@ git config --global push.default simple
 ##########################################################
 
 echo ""
-cecho "Is Dropbox installed and setup? (y/n)" $red
+echo "Is Dropbox installed and setup? (y/n)" $red
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   CONTINUE=true
@@ -147,19 +147,19 @@ echo ""
 CONTINUE=false
 
 echo ""
-cecho "###############################################" $red
-cecho "#        DO NOT RUN THIS SCRIPT BLINDLY       #" $red
-cecho "#         YOU'LL PROBABLY REGRET IT...        #" $red
-cecho "#                                             #" $red
-cecho "#              READ IT THOROUGHLY             #" $red
-cecho "#         AND EDIT TO SUIT YOUR NEEDS         #" $red
-cecho "###############################################" $red
+echo "###############################################" $red
+echo "#        DO NOT RUN THIS SCRIPT BLINDLY       #" $red
+echo "#         YOU'LL PROBABLY REGRET IT...        #" $red
+echo "#                                             #" $red
+echo "#              READ IT THOROUGHLY             #" $red
+echo "#         AND EDIT TO SUIT YOUR NEEDS         #" $red
+echo "###############################################" $red
 echo ""
 
 
 echo ""
-cecho "Have you read through the script you're about to run and " $red
-cecho "understood that it will make changes to your computer? (y/n)" $red
+echo "Have you read through the script you're about to run and " $red
+echo "understood that it will make changes to your computer? (y/n)" $red
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   CONTINUE=true
@@ -167,7 +167,7 @@ fi
 
 if ! $CONTINUE; then
   # Check if we're continuing and output a message if not
-  cecho "Please go read the script, it only takes a few minutes" $red
+  echo "Please go read the script, it only takes a few minutes" $red
   exit
 fi
 
@@ -179,18 +179,6 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 # General UI/UX
 ###############################################################################
-
-echo ""
-echo "Would you like to set your computer name (as done via System Preferences >> Sharing)?  (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  echo "What would you like it to be?"
-  read COMPUTER_NAME
-  sudo scutil --set ComputerName $COMPUTER_NAME
-  sudo scutil --set HostName $COMPUTER_NAME
-  sudo scutil --set LocalHostName $COMPUTER_NAME
-  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $COMPUTER_NAME
-fi
 
 echo ""
 echo "Hide the Time Machine, Volume, User, and Bluetooth icons?  (y/n)"
@@ -668,14 +656,14 @@ fi
 ###############################################################################
 
 echo ""
-cecho "Done!" $cyan
+echo "Done!" $cyan
 echo ""
 echo ""
-cecho "################################################################################" $white
+echo "################################################################################" $white
 echo ""
 echo ""
-cecho "Note that some of these changes require a logout/restart to take effect." $red
-cecho "Killing some open applications in order to take effect." $red
+echo "Note that some of these changes require a logout/restart to take effect." $red
+echo "Killing some open applications in order to take effect." $red
 echo ""
 
 find ~/Library/Application\ Support/Dock -name "*.db" -maxdepth 1 -delete
