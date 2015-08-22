@@ -12,4 +12,4 @@ Perhaps one line of this was actually written by me. I'd like to give credit to 
 
 - [Joe Tannenbaum](https://github.com/joetannenbaum) for the base script and the idea.
 - [Lapwing Labs](http://lapwinglabs.com/blog/hacker-guide-to-setting-up-your-mac) for the "Hacker's Guide to Setting up Your Mac" which was integral.
-- [OS X for Hackers/Brandon Brown](https://gist.github.com/brandonb927/3195465)where most of the code is actually from.
+- [OS X for Hackers/Brandon Brown](https://gist.github.com/brandonb927/3195465) where most of the code is actually from.
