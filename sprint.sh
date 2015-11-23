@@ -18,20 +18,21 @@ brew install homebrew/dupes/grep
 # Install some apps!
 brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
-brew cask install adobe-creative-cloud
-brew cask install appcleaner
-brew cask install firefox
-brew cask install google-chrome
-brew cask install grandperspective
-brew cask install sublime-text
-brew cask install sequel-pro
-brew cask install sketch
-brew cask install transmit
-brew cask install transmission
-brew cask install spotify
-brew cask install slack
-brew cask install vagrant
-brew cask install virtualbox
+brew cask install --appdir="/Applications" adobe-creative-cloud
+brew cask install --appdir="/Applications" appcleaner
+brew cask install --appdir="/Applications" firefox
+brew cask install --appdir="/Applications" flickr-uploadr
+brew cask install --appdir="/Applications" google-chrome
+brew cask install --appdir="/Applications" grandperspective
+brew cask install --appdir="/Applications" sublime-text
+brew cask install --appdir="/Applications" sequel-pro
+brew cask install --appdir="/Applications" sketch
+brew cask install --appdir="/Applications" transmit
+brew cask install --appdir="/Applications" transmission
+brew cask install --appdir="/Applications" spotify
+brew cask install --appdir="/Applications" slack
+brew cask install --appdir="/Applications" vagrant
+brew cask install --appdir="/Applications" virtualbox
 
 brew install node
 npm install -g gulp bower
