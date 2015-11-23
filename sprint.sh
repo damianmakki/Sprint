@@ -18,15 +18,14 @@ brew install homebrew/dupes/grep
 # Install some apps!
 brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
+brew cask install adobe-creative-cloud
 brew cask install appcleaner
-brew cask install calibre
-brew cask install dropbox
 brew cask install firefox
 brew cask install google-chrome
 brew cask install grandperspective
-brew cask install lastpass
-brew cask install sublime-text3
+brew cask install sublime-text
 brew cask install sequel-pro
+brew cask install sketch
 brew cask install transmit
 brew cask install transmission
 brew cask install spotify
@@ -137,7 +136,6 @@ echo ""
 echo "Other things you may want to grab:"
 echo ""
 echo "=> Wunderlist https://itunes.apple.com/app/wunderlist-to-do-list-tasks/id410628904"
-echo "=> Adobe Creative Cloud http://www.adobe.com/creativecloud.html"
 echo ""
 
 
@@ -179,25 +177,6 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 # General UI/UX
 ###############################################################################
-
-echo ""
-echo "Hide the Time Machine, Volume, User, and Bluetooth icons?  (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  # Get the system Hardware UUID and use it for the next menubar stuff
-  for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
-    defaults write "${domain}" dontAutoLoad -array \
-      "/System/Library/CoreServices/Menu Extras/TimeMachine.menu" \
-      "/System/Library/CoreServices/Menu Extras/Volume.menu" \
-      "/System/Library/CoreServices/Menu Extras/User.menu"
-  done
-
-  defaults write com.apple.systemuiserver menuExtras -array \
-    "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
-    "/System/Library/CoreServices/Menu Extras/AirPort.menu" \
-    "/System/Library/CoreServices/Menu Extras/Battery.menu" \
-    "/System/Library/CoreServices/Menu Extras/Clock.menu"
-fi
 
 echo ""
 echo "Disable Spotlight indexing for any volume that gets mounted and has not yet been indexed before? (y/n)"
@@ -355,10 +334,6 @@ echo ""
 echo "Enabling subpixel font rendering on non-Apple LCDs"
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
 
-echo ""
-echo "Enabling HiDPI display modes (requires restart)"
-sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
-
 ###############################################################################
 # Finder
 ###############################################################################
@@ -395,13 +370,6 @@ echo "Show status bar in Finder by default? (y/n)"
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   defaults write com.apple.finder ShowStatusBar -bool true
-fi
-
-echo ""
-echo "Display full POSIX path as Finder window title? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 fi
 
 echo ""
@@ -446,11 +414,6 @@ defaults write com.apple.finder QLEnableTextSelection -bool true
 echo ""
 echo "Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate"
 defaults write com.apple.dock tilesize -int 36
-
-echo ""
-echo "Speeding up Mission Control animations and grouping windows by application"
-defaults write com.apple.dock expose-animation-duration -float 0.1
-defaults write com.apple.dock "expose-group-by-app" -bool true
 
 
 ###############################################################################
@@ -590,25 +553,6 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   defaults write org.m0k.transmission BlocklistURL -string "http://john.bitsurge.net/public/biglist.p2p.gz"
 fi
 
-
-###############################################################################
-# Sublime Text
-###############################################################################
-echo ""
-echo "Do you use Sublime Text 3 as your editor of choice, and is it installed?"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  # Installing from homebrew cask does the following for you!
-  # echo ""
-  # echo "Linking Sublime Text for command line usage as subl"
-  # ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
-
-  echo ""
-  echo "Setting Git to use Sublime Text as default editor"
-  git config --global core.editor "subl -n -w"
-fi
-
-
 ###############################################################################
 # Kill affected applications
 ###############################################################################
@@ -630,5 +574,3 @@ for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
   "Terminal" "Transmission"; do
   killall "${app}" > /dev/null 2>&1
 done
-
-
