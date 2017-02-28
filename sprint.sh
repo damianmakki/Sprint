@@ -1,3 +1,15 @@
+echo ""
+echo "##########################################"
+echo "Welcome to Sprint!"
+echo "To get started, we're gonna need your password to run some commands in Administrator mode."
+echo "##########################################"
+echo ""
+
+# Here we go.. ask for the administrator password upfront and run a
+# keep-alive to update existing `sudo` time stamp until script has finished
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 # Check for Homebrew,
 # Install if we don't have it
 if test ! $(which brew); then
@@ -18,10 +30,16 @@ brew install homebrew/dupes/grep
 # Install some apps!
 brew install caskroom/cask/brew-cask
 brew install argon/mas/mas
+brew install yarn
+brew install mackup
+brew install node
+brew install homebrew/php/composer
+brew tap homebrew/homebrew-php
 brew tap caskroom/versions
 
 apps=(
   appcleaner
+  colorpicker-skalacolor
   dropbox
   firefox
   fontprep
@@ -39,37 +57,41 @@ apps=(
   virtualbox
 )
 
-brew cask install --appdir="~/Applications" ${apps[@]}
+brew cask install --appdir="/Applications" ${apps[@]}
 brew cask cleanup
 
-open -a "Google Chrome" --args --make-default-browser
 
 # Use MAS to install Mac App Store Apps
-echo "=> "Installing Mac App Store Apps"
+echo ""
+echo "##########################################"
+echo "Installing Mac App Store Apps"
+echo "##########################################"
+echo ""
 
 mas signin --dialog damian.makki@gmail.com
 
-#Wunderlist
+# Wunderlist
 mas install 410628904
 
-#Keynote
+# Keynote
 mas install 409183694
 
-#Pages
+# Pages
 mas install 409201541
 
-#Xcode
-mas install 497799835
+# Xcode
+#mas install 497799835
 
-brew install node
 npm install -g gulp bower
 sudo gem install sass
-
 sudo easy_install pip
 sudo pip install ansible
-pip install mackup
 
-echo "=> Configuring Git"
+echo ""
+echo "##########################################"
+echo "Configuring Git"
+echo "##########################################"
+echo ""
 
 git config --global user.email "damian@makki.pro"
 git config --global user.name "Damian Makki"
@@ -84,108 +106,108 @@ git config --global push.default simple
 # Let's start some symlinking!
 ##########################################################
 
+cd /Applications
+open Dropbox.app
+
 echo ""
-echo "Is Dropbox installed and setup? (y/n)" $red
+echo "##########################################"
+echo "Is Dropbox setup and synced? Y/N"
+echo "##########################################"
+echo ""
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   CONTINUE=true
 fi
 
-# Assumes Dropbox is off of the home directory
-home="$PWD/../.."
+# Symlinking ST3 Packages
+echo ""
+echo "##########################################"
+echo "=> Symlinking ST3 Packages"
+echo "##########################################"
+echo ""
+cd ~/Library/Application\ Support/Sublime\ Text\ 3
+rm -rf Installed\ Packages.bak
+mv Installed\ Packages Installed\ Packages.bak
+rm -rf Installed\ Packages
+ln -s ~/Dropbox/Sprint/Sublime/Installed\ Packages
 
-sublimeDir="$home/Library/Application Support/Sublime Text 3"
+rm -rf Packages.bak
+mv Packages Packages.bak
+rm -rf Packages
+ln -s ~/Dropbox/Sprint/Sublime/Packages
 
-packages="$sublimeDir/Packages"
-sharedPackages="$PWD/Sublime/Packages"
 
-if [[ ! -L $packages ]]; then
-    echo "=> Symlinking Sublime Packages directory"
-    mv "$packages" "$packages.bak"
-    ln -s "$sharedPackages" "$sublimeDir"
+# Symlinking SSH Config
+echo ""
+echo "##########################################"
+echo "=> Symlinking SSH Config"
+echo "##########################################"
+echo ""
+cd ~
+sudo rm -rf .ssh.bak
+sudo mv .ssh .ssh.bak
+sudo ln -s ~/Dropbox/Sprint/.ssh
+
+# Symlinking Hosts
+echo ""
+echo "##########################################"
+echo "=> Symlinking Hosts"
+echo "##########################################"
+echo ""
+cd /etc/
+sudo rm -rf hosts.bak
+sudo mv hosts hosts.bak
+sudo ls -s ~/Dropbox/Sprint/hosts
+
+echo ""
+echo "##########################################"
+echo "Are Vagrant and Virtualbox Installed? Y/N"
+echo "##########################################"
+echo ""
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  CONTINUE=true
 fi
 
-installedPackages="$sublimeDir/Installed Packages"
-sharedInstalledPackages="$PWD/Sublime/Installed Packages"
+# Setup Homestead
+vagrant box add laravel/homestead
 
-if [[ ! -L $installedPackages ]]; then
-    echo "=> Symlinking Sublime Installed Packages directory"
-    mv "$installedPackages" "$installedPackages.bak"
-    ln -s "$sharedInstalledPackages" "$sublimeDir"
-fi
+cd ~
+git clone https://github.com/laravel/homestead.git Homestead
 
-sshConfig="$home/.ssh"
-sharedSshConfig="$PWD/.ssh"
-
-if [[ ! -L $sshConfig ]]; then
-    echo "=> Symlinking SSH Config"
-
-    # New new computer may not have it
-    if [[ -d $sshConfig ]]; then
-        mv "$sshConfig" "$sshConfig.bak"
-    fi
-
-    ln -s "$sharedSshConfig" "$sshConfig"
-fi
-
-bash_profile="$home/.bash_profile"
-sharedBashProfile="$PWD/.bash_profile"
-
-if [[ ! -L $bash_profile ]]; then
-    echo "=> Symlinking Bash Profile"
-
-    # New new computer may not have it
-    if [[ -f $bash_profile ]]; then
-        mv "$bash_profile" "$bash_profile.bak"
-    fi
-
-    ln -s "$sharedBashProfile" "$bash_profile"
-fi
-
-etcHosts="/etc/hosts"
-sharedEtcHosts="$PWD/hosts"
-
-if [[ ! -L $etcHosts ]]; then
-    echo "=> Symlinking Hosts File"
-
-    # New new computer may not have it
-    if [[ -f $etcHosts ]]; then
-        sudo mv "$etcHosts" "$etcHosts.bak"
-    fi
-
-    sudo ln -s "$sharedEtcHosts" "/etc"
-fi
+# Symlinking Homestead
+echo ""
+echo "##########################################"
+echo "=> Symlinking Homestead"
+echo "##########################################"
+echo ""
+cd ~/.homestead/
+sudo rm -rf Homestead.yaml.bak
+mv Homestead.yaml Homestead.yaml.bak
+ln -s ~/Dropbox/Sprint/Homestead/Homestead.yaml
 
 echo ""
 echo "##########################################"
 echo "All set!"
 echo "##########################################"
 echo ""
-echo "Other things you may want to grab:"
-echo ""
-echo "=> Wunderlist https://itunes.apple.com/app/wunderlist-to-do-list-tasks/id410628904"
-echo ""
-
-
 
 
 # Set continue to false by default
 CONTINUE=false
 
 echo ""
-echo "###############################################" $red
-echo "#        DO NOT RUN THIS SCRIPT BLINDLY       #" $red
-echo "#         YOU'LL PROBABLY REGRET IT...        #" $red
-echo "#                                             #" $red
-echo "#              READ IT THOROUGHLY             #" $red
-echo "#         AND EDIT TO SUIT YOUR NEEDS         #" $red
-echo "###############################################" $red
+echo "#############################################"
+echo "Next we're gonna set up some system settings."
+echo "I'd suggest you read through the file to get"
+echo "an idea of what's going to change."
+echo "#############################################"
 echo ""
 
 
 echo ""
-echo "Have you read through the script you're about to run and " $red
-echo "understand that it will make changes to your computer? (y/n)" $red
+echo "Have you read through the script you're about to run and " 
+echo "understand that it will make changes to your computer? Y/N" 
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   CONTINUE=true
@@ -193,39 +215,19 @@ fi
 
 if ! $CONTINUE; then
   # Check if we're continuing and output a message if not
-  echo “Check out the script and make any changes you’d like” $red
+  echo "Check out the script and make any changes you’d like" 
   exit
 fi
-
-# Here we go.. ask for the administrator password upfront and run a
-# keep-alive to update existing `sudo` time stamp until script has finished
-sudo -v
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ###############################################################################
 # General UI/UX                                                               #
 ###############################################################################
 
-echo ""
-echo "Would you like to set your computer name (as done via System Preferences >> Sharing)?  (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-    echo "What would you like it to be?"
-    read COMPUTER_NAME
-    sudo scutil --set ComputerName $COMPUTER_NAME
-    sudo scutil --set HostName $COMPUTER_NAME
-    sudo scutil --set LocalHostName $COMPUTER_NAME
-    sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $COMPUTER_NAME
-fi
-
 # Use Dark mode for the menu bar
 defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
 
-# Set the appearance color for buttons, menus, and windows to graphite
-defaults write NSGlobalDomain AppleAquaColorVariant -int 6
-
-# Set highlight color to graphite
-defaults write NSGlobalDomain AppleHighlightColor -string "0.847059 0.847059 0.862745"
+# Disable Natural Scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
 # Set sidebar icon size to medium
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
@@ -243,10 +245,10 @@ defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 # Save to disk (not to iCloud) by default
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
-# Disable the “Are you sure you want to open this application?” dialog
+# Disable the "Are you sure you want to open this application?" dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-# Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
+# Remove duplicates in the "Open With" menu (also see `lscleanup` alias)
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 # Display ASCII control characters using caret notation in standard text views
@@ -259,9 +261,6 @@ defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 # Reveal IP address, hostname, OS version, etc. when clicking the clock
 # in the login window
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
-
-# Disable Notification Center and remove the menu bar icon
-launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2> /dev/null
 
 # Disable smart quotes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
@@ -398,7 +397,7 @@ chflags nohidden ~/Library
 sudo chflags nohidden /Volumes
 
 # Expand the following File Info panes:
-# “General”, “Open with”, and “Sharing & Permissions”
+# "General", "Open with", and "Sharing & Permissions"
 defaults write com.apple.finder FXInfoPanesExpanded -dict \
     General -bool true \
     OpenWith -bool true \
@@ -408,8 +407,8 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 # Dock, Dashboard, and Menu bar                                               #
 ###############################################################################
 
-# Set the icon size of Dock items to 36 pixels
-defaults write com.apple.dock tilesize -int 36
+# Set the icon size of Dock items to 30 pixels
+defaults write com.apple.dock tilesize -int 30
 
 # Change minimize/maximize window effect
 defaults write com.apple.dock mineffect -string "scale"
@@ -476,34 +475,45 @@ defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
 
 # Remove useless icons from Safari’s bookmarks bar
 defaults write com.apple.Safari ProxiesInBookmarksBar "()"
+
 # Enable the Develop menu and the Web Inspector in Safari
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
 # Add a context menu item for showing the Web Inspector in web views
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+
 # Enable continuous spellchecking
 defaults write com.apple.Safari WebContinuousSpellCheckingEnabled -bool true
+
 # Disable auto-correct
 defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool false
+
 # Disable AutoFill
 defaults write com.apple.Safari AutoFillFromAddressBook -bool false
 defaults write com.apple.Safari AutoFillPasswords -bool false
 defaults write com.apple.Safari AutoFillCreditCardData -bool false
 defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
+
 # Warn about fraudulent websites
 defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
+
 # Disable plug-ins
 defaults write com.apple.Safari WebKitPluginsEnabled -bool false
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2PluginsEnabled -bool false
+
 # Disable Java
 defaults write com.apple.Safari WebKitJavaEnabled -bool false
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabled -bool false
+
 # Block pop-up windows
 defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically -bool false
-# Enable “Do Not Track”
+
+# Enable "Do Not Track"
 defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+
 # Update extensions automatically
 defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
 
@@ -561,18 +571,23 @@ defaults write com.apple.Terminal "Startup Window Settings" -string "Pro"
 
 # Prevent Time Machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
 # Disable local Time Machine backups
 hash tmutil &> /dev/null && sudo tmutil disablelocal
 
 ###############################################################################
 # Activity Monitor                                                            #
 ###############################################################################
+
 # Show the main window when launching Activity Monitor
 defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+
 # Visualize CPU usage in the Activity Monitor Dock icon
 defaults write com.apple.ActivityMonitor IconType -int 5
+
 # Show all processes in Activity Monitor
 defaults write com.apple.ActivityMonitor ShowCategory -int 0
+
 # Sort Activity Monitor results by CPU usage
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
@@ -583,12 +598,15 @@ defaults write com.apple.ActivityMonitor SortDirection -int 0
 
 # Use plain text mode for new TextEdit documents
 defaults write com.apple.TextEdit RichText -int 0
+
 # Open and save files as UTF-8 in TextEdit
 defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
 # Enable the debug menu in Disk Utility
 defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
 defaults write com.apple.DiskUtility advanced-image-options -bool true
+
 # Auto-play videos when opened with QuickTime Player
 defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
 
@@ -598,20 +616,28 @@ defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
 
 # Enable the WebKit Developer Tools in the Mac App Store
 defaults write com.apple.appstore WebKitDeveloperExtras -bool true
+
 # Enable Debug Menu in the Mac App Store
 defaults write com.apple.appstore ShowDebugMenu -bool true
+
 # Don't enable the automatic update check
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool false
+
 # Check for software updates daily, not just once per week
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+
 # Download newly available updates in background
 defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+
 # Install System data files & security updates
 defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+
 # Automatically download apps purchased on other Macs
 defaults write com.apple.SoftwareUpdate ConfigDataInstall -int 1
+
 # Turn off app auto-update
 defaults write com.apple.commerce AutoUpdate -bool false
+
 # Don't allow the App Store to reboot machine on macOS updates
 defaults write com.apple.commerce AutoUpdateRestartRequired -bool false
 
@@ -635,8 +661,10 @@ defaults write com.apple.messageshelper.MessageController SOInputLineSettings -d
 
 # Allow installing user scripts via GitHub Gist or Userscripts.org
 defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*"
+
 # Use the system-native print preview dialog
 defaults write com.google.Chrome DisablePrintPreview -bool true
+
 # Expand the print dialog by default
 defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
 
@@ -647,20 +675,27 @@ defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
 mkdir -p ~/Downloads/Incomplete
 # Auto-import from ~/Downloads folder
 defaults write org.m0k.transmission AutoImportDirectory -string "${HOME}/Downloads"
+
 # Use `~/Downloads/Incomplete` to store incomplete downloads
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Incomplete"
+
 # Don’t prompt for confirmation before downloading
 defaults write org.m0k.transmission DownloadAsk -bool false
 defaults write org.m0k.transmission MagnetOpenAsk -bool false
+
 # Trash original torrent files
 defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
+
 # Hide the donate message
 defaults write org.m0k.transmission WarningDonate -bool false
+
 # Hide the legal disclaimer
 defaults write org.m0k.transmission WarningLegal -bool false
+
 # Auto-resize to fit all transfers
 defaults write org.m0k.transmission AutoSize -bool true
+
 # IP block list.
 # Source: https://giuliomac.wordpress.com/2014/02/19/best-blocklist-for-transmission/
 defaults write org.m0k.transmission EncryptionRequire -bool true
