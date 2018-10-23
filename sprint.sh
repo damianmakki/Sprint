@@ -31,7 +31,6 @@ brew install homebrew/dupes/grep
 brew install caskroom/cask/brew-cask
 brew install argon/mas/mas
 brew install yarn
-brew install mackup
 brew install node
 brew install homebrew/php/composer
 brew tap homebrew/homebrew-php
@@ -39,13 +38,15 @@ brew tap caskroom/versions
 
 apps=(
   appcleaner
+  authy
   colorpicker-skalacolor
-  dropbox
   firefox
   fontprep
   google-chrome
   grandperspective
+  handbrake
   imageoptim
+  postman
   sequel-pro
   slack
   spotify
@@ -69,9 +70,6 @@ echo "##########################################"
 echo ""
 
 mas signin --dialog damian.makki@gmail.com
-
-# Wunderlist
-mas install 410628904
 
 # Keynote
 mas install 409183694
@@ -223,9 +221,6 @@ fi
 # General UI/UX                                                               #
 ###############################################################################
 
-# Use Dark mode for the menu bar
-defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
-
 # Disable Natural Scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
@@ -267,6 +262,24 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
 # Disable smart dashes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# Tap behavior.
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 2
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 2
+
+# Enable "tap-and-a-half" to drag.
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
+defaults write com.apple.AppleMultitouchTrackpad Dragging -int 1
+
+# Enable 3-finger drag. (Moving with 3 fingers in any window "chrome" moves the window.)
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+
+# Disable GateKeeper
+sudo spctl –master-disable
+
+# Enable dark mode on Mojave
+defaults write /Library/Preferences/.GlobalPreferences.plist _HIEnableThemeSwitchHotKey -bool true
 
 ###############################################################################
 # SSD-specific tweaks                                                         #
@@ -314,7 +327,7 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 defaults write com.apple.screencapture location -string "${HOME}/Desktop"
 
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
-defaults write com.apple.screencapture type -string "png"
+defaults write com.apple.screencapture type -string "jpg"
 
 ###############################################################################
 # Finder                                                                      #
@@ -435,89 +448,6 @@ defaults write com.apple.dock dashboard-in-overlay -bool true
 defaults write com.apple.dock mru-spaces -bool false
 
 ###############################################################################
-# Safari & WebKit                                                             #
-###############################################################################
-
-# Privacy: don’t send search queries to Apple
-defaults write com.apple.Safari UniversalSearchEnabled -bool false
-defaults write com.apple.Safari SuppressSearchSuggestions -bool true
-
-# Press Tab to highlight each item on a web page
-defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
-
-# Show the full URL in the address bar (note: this still hides the scheme)
-defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
-
-# Set Safari’s home page to `about:blank` for faster loading
-defaults write com.apple.Safari HomePage -string "about:blank"
-
-# Prevent Safari from opening ‘safe’ files automatically after downloading
-defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
-
-# Allow hitting the Backspace key to go to the previous page in history
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool true
-
-# Hide Safari’s bookmarks bar by default
-defaults write com.apple.Safari ShowFavoritesBar -bool false
-
-# Hide Safari’s sidebar in Top Sites
-defaults write com.apple.Safari ShowSidebarInTopSites -bool false
-
-# Disable Safari’s thumbnail cache for History and Top Sites
-defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
-
-# Enable Safari’s debug menu
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
-# Make Safari’s search banners default to Contains instead of Starts With
-defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
-
-# Remove useless icons from Safari’s bookmarks bar
-defaults write com.apple.Safari ProxiesInBookmarksBar "()"
-
-# Enable the Develop menu and the Web Inspector in Safari
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
-
-# Add a context menu item for showing the Web Inspector in web views
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
-
-# Enable continuous spellchecking
-defaults write com.apple.Safari WebContinuousSpellCheckingEnabled -bool true
-
-# Disable auto-correct
-defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool false
-
-# Disable AutoFill
-defaults write com.apple.Safari AutoFillFromAddressBook -bool false
-defaults write com.apple.Safari AutoFillPasswords -bool false
-defaults write com.apple.Safari AutoFillCreditCardData -bool false
-defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
-
-# Warn about fraudulent websites
-defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
-
-# Disable plug-ins
-defaults write com.apple.Safari WebKitPluginsEnabled -bool false
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2PluginsEnabled -bool false
-
-# Disable Java
-defaults write com.apple.Safari WebKitJavaEnabled -bool false
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabled -bool false
-
-# Block pop-up windows
-defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically -bool false
-
-# Enable "Do Not Track"
-defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
-
-# Update extensions automatically
-defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
-
-###############################################################################
 # Mail                                                                        #
 ###############################################################################
 
@@ -536,9 +466,6 @@ defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -stri
 # Disable inline attachments (just show the icons)
 defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
 
-# Disable automatic spell checking
-defaults write com.apple.mail SpellCheckingBehavior -string "NoSpellCheckingEnabled"
-
 ###############################################################################
 # Spotlight                                                                   #
 ###############################################################################
@@ -548,6 +475,7 @@ sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Vol
 
 # Load new settings before rebuilding the index
 killall mds > /dev/null 2>&1
+
 # Make sure indexing is enabled for the main volume
 sudo mdutil -i on / > /dev/null
 
@@ -560,10 +488,6 @@ sudo mdutil -E / > /dev/null
 
 # Only use UTF-8 in Terminal.app
 defaults write com.apple.terminal StringEncodings -array 4
-
-# Use the Pro theme for Terminal
-defaults write com.apple.Terminal "Default Window Settings" -string "Pro"
-defaults write com.apple.Terminal "Startup Window Settings" -string "Pro"
 
 ###############################################################################
 # Time Machine                                                                #
@@ -654,19 +578,6 @@ defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
 # Disable smart quotes as it’s annoying for messages that contain code
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticQuoteSubstitutionEnabled" -bool false
-
-###############################################################################
-# Google Chrome                                                               #
-###############################################################################
-
-# Allow installing user scripts via GitHub Gist or Userscripts.org
-defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*"
-
-# Use the system-native print preview dialog
-defaults write com.google.Chrome DisablePrintPreview -bool true
-
-# Expand the print dialog by default
-defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
 
 ###############################################################################
 # Transmission.app                                                            #
